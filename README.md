@@ -30,3 +30,10 @@ Random access by index is O(n) — it walks the node chain — so this structure
 Negative indices behave like Python lists (e.g. `ull[-1]` is the last element). Slice *reading* works and returns a plain list; slice *assignment* and slice *deletion* raise `TypeError`, because the node-splicing semantics were not worth the complexity for this small library.
 
 `remove` and `index` compare by `==`, matching `list`. They raise `ValueError`, not `IndexError`, when the element is absent.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
